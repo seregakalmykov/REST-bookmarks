@@ -8,8 +8,7 @@ $config = [
     'bootstrap' => ['log'],
     'components' => [
         'request' => [
-            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'ZhNTcWOYjcVQl9F9KaIAdITE8M1pwXDG',
+            'cookieValidationKey' => 'dawoi3ungwnoixmdiybshkudcsiuxbebxs7e783t4gr6n3dxe',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -38,14 +37,6 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
     ],
     'params' => $params,
 ];
