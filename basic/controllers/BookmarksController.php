@@ -9,7 +9,6 @@ use yii\data\ActiveDataProvider;
 
 class BookmarksController extends ActiveController
 {
-    public $limit_bookmarks = 10; //ограничение количества выводимых закладок
     public $modelClass = 'app\models\Bookmarks';
 
     public function actions()
@@ -28,24 +27,20 @@ class BookmarksController extends ActiveController
     public function prepareDataProvider()
     {
         $modelClass = $this->modelClass;
-        return $modelClass::find()->orderBy(['id' => SORT_DESC])->limit($this->limit_bookmarks)->all();
+        return $modelClass::find()->orderBy(['id' => SORT_DESC])->limit(\Yii::$app->params['count_bookmarks'])->all();
     }
 
     public function actionSearch()
     {
         if (!empty($_GET)) {
             try {
-                $provider = Bookmarks::find()->where(['url' => \Yii::$app->request->get('url')])->one();
-                $provider->comments = Comments::find()->where(['bookmark_id' => $provider->id])->all();
-                return $provider;
+                if ($bookmark = Bookmarks::find()->where(['url' => \Yii::$app->request->get('url')])->all() !== null){
+                    return Bookmarks::find()->where(['url' => \Yii::$app->request->get('url')])->all();
+                } else {
+                    throw new \yii\web\HttpException(404, 'No bookmarks found with this url');
+                }
             } catch (Exception $ex) {
                 throw new \yii\web\HttpException(500, 'Internal server error');
-            }
-
-            if ($provider) {
-                throw new \yii\web\HttpException(404, 'No bookmarks found with this url');
-            } else {
-                return $provider;
             }
         } else {
             throw new \yii\web\HttpException(400, 'There are no query string');
