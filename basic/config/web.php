@@ -9,6 +9,10 @@ $config = [
     'components' => [
         'request' => [
             'cookieValidationKey' => 'dawoi3ungwnoixmdiybshkudcsiuxbebxs7e783t4gr6n3dxe',
+            'baseUrl' => '/REST_bookmarks/basic',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -37,8 +41,21 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
+        'urlManager' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'Bookmarks'],
+            ],
+        ],
+        'assetManager' => [
+            'basePath' => '@webroot/assets',
+            'baseUrl' => '@web/assets',
+        ],
+
     ],
     'params' => $params,
+
 ];
 
 if (YII_ENV_DEV) {

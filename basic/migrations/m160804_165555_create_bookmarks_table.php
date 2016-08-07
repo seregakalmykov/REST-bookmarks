@@ -15,7 +15,7 @@ class m160804_165555_create_bookmarks_table extends Migration
         $this->createTable('bookmarks', [
             'id' => $this->primaryKey(),
             'url' => $this->string()->notNull()->unique(),
-            'created_at' => $this->datetime(),
+            'created_at' => $this->integer(),
         ], 'ENGINE InnoDB');
     }
 

@@ -14,9 +14,9 @@ class m160804_170806_create_comments_table extends Migration
     {
         $this->createTable('comments', [
             'id' => $this->primaryKey(),
-            'url' => $this->string(),
+            'text' => $this->string(),
             'bookmark_id' => $this->integer(),
-            'created_at' => $this->datetime(),
+            'created_at' => $this->integer(),
             'ip' => $this->string()->notNULL(),
         ]);
         $this->createIndex('FK_bookmark', 'comments', 'bookmark_id');
