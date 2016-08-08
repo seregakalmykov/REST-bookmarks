@@ -9,7 +9,7 @@ $config = [
     'components' => [
         'request' => [
             'cookieValidationKey' => 'dawoi3ungwnoixmdiybshkudcsiuxbebxs7e783t4gr6n3dxe',
-            'baseUrl' => '/REST_bookmarks/basic',
+            'baseUrl' => '/REST_bookmarks',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ]
@@ -49,8 +49,8 @@ $config = [
                 'GET bookmarks/<url:\S+>' => 'bookmarks/search/',
                 'POST bookmarks' => 'bookmarks/create/',
                 'POST comments' => 'comments/create/',
-                'DELETE comments/<id:\d+>' => 'comments/delete/',
                 'PUT comments' => 'comments/update/',
+                'DELETE comments/<id:\d+>' => 'comments/delete/',
             ],
         ],
         'assetManager' => [

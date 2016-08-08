@@ -90,7 +90,7 @@ class CommentsController extends ActiveController
                     if ($comment->ip === \Yii::$app->request->userIP){
                         if (date('U') - $comment->created_at < \Yii::$app->params['time_UD_comments']){
                             $comment->delete();
-                            throw new \yii\web\HttpException(0,'Comments deleted successfully');
+                            throw new \yii\web\HttpException(200,'Comments deleted successfully');
                         } else {
                             throw new \yii\web\HttpException(403, 'Comment added over an '.\Yii::$app->params['time_UD_comments'].' seconds ago');
                         }
