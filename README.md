@@ -6,7 +6,9 @@ Bookmarks REST
 
 ### Получить список 10 последних добавленных Bookmark
 Path: /bookmarks
+
 Method: GET
+
 Ответ:
 
      0:  {
@@ -23,8 +25,11 @@ Method: GET
 
 ### Получить Bookmark (с комментариями) по Bookmark.url
 Path: /bookmarks/{url}
+
 Method: GET
+
 Например: /bookmarks/http://test
+
 Ответ:
 
      {
@@ -43,8 +48,11 @@ Method: GET
 
 ### Добавить Bookmark по url и получить Bookmark.uid
 Path: /bookmarks
+
 Method: POST
+
 Параметры: url
+
 Ответ:
 
      {
@@ -55,8 +63,11 @@ Method: POST
 
 ### Добавить Comment к Bookmark (по uid) и получить Comment.uid
 Path: /comments
+
 Method: POST
+
 Параметры: text, bookmark_id
+
 Ответ:
 
      {
@@ -69,8 +80,11 @@ Method: POST
 
 ### Изменить Comment.text по uid (если он добавлен с этого же IP и прошло меньше часа после добавления)
 Path: /comments
+
 Method: PUT
+
 Параметры: id, text
+
 Ответ:
 
      {
@@ -83,7 +97,9 @@ Method: PUT
 
 ### Удалить Comment по uid (если он добавлен с этого же IP и прошло меньше часа после добавления)
 Path: /comments/{id}
+
 Method: DELETE
+
 Ответ:
 
      {
