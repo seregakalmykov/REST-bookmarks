@@ -45,7 +45,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'Bookmarks'],
+                'class' => 'yii\rest\UrlRule',
+                'controller' => 'controllers\BookmarksController',
             ],
         ],
         'assetManager' => [

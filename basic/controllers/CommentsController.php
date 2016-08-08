@@ -55,78 +55,56 @@ class CommentsController extends ActiveController
     }
 
     public function actionUpdate(){
-        if (!empty($_POST)) {
-            $comment = new Comments();
-            foreach ($_POST as $key => $value) {
-                if (!$comment->hasAttribute($key)) {
-                    throw new \yii\web\HttpException(404, 'Invalid attribute:' . $key);
-                }
-            }
-            if (\Yii::$app->request->post('text') && \Yii::$app->request->post('id')){
-                try {
-                    if ($comment = self::findModel(\Yii::$app->request->post('id')) !== null) {
+        if (\Yii::$app->request->post('text') && \Yii::$app->request->post('id')) {
 
-                        if ($comment->ip === Yii::$app->request->userIP){
-                            if (date('U') - $comment->create_at < \Yii::$app->params['time_UD_comments']){
-                                $comment->text = Yii::$app->request->post('text');
-                                $comment->save();
-                            } else {
-                                throw new \yii\web\HttpException(403, 'Comment was add from another IP');
-                            }
+            try {
+                if (Comments::find(\Yii::$app->request->post('id'))->exists()) {
+                    $comment = $this->findModel(\Yii::$app->request->post('id'));
+                    if ($comment->ip === \Yii::$app->request->userIP){
+                        if (date('U') - $comment->created_at < \Yii::$app->params['time_UD_comments']){
+                            $comment->text = \Yii::$app->request->post('text');
+                            $comment->save();
+                            return $comment;
                         } else {
-                            throw new \yii\web\HttpException(403, 'Comment was add from another IP');
+                            throw new \yii\web\HttpException(403, 'Comment added over an '.\Yii::$app->params['time_UD_comments'].' seconds ago');
                         }
-
-                        return $comment;
                     } else {
-                        throw new \yii\web\HttpException(404, 'No comments found with this id');
+                        throw new \yii\web\HttpException(403, 'Comment was add from another IP');
                     }
-                } catch (Exception $ex) {
-                    throw new \yii\web\HttpException(500, 'Internal server error');
+                } else {
+                    throw new \yii\web\HttpException(404, 'No comments found with this id');
                 }
-            } else {
-                throw new \yii\web\HttpException(404, 'Not found comment_id or text in query string');
+            } catch (Exception $ex) {
+                throw new \yii\web\HttpException(500, 'Internal server error');
             }
         } else {
-            throw new \yii\web\HttpException(400, 'There are no query string');
+            throw new \yii\web\HttpException(400, 'Bad query string');
         }
     }
 
     public function actionDelete(){
-        if (!empty($_POST)) {
-            $comment = new Comments();
-            foreach ($_POST as $key => $value) {
-                if (!$comment->hasAttribute($key)) {
-                    throw new \yii\web\HttpException(404, 'Invalid attribute:' . $key);
-                }
-            }
-            if (\Yii::$app->request->post('id')){
-                try {
-                    if ($comment = self::findModel(\Yii::$app->request->post('id')) !== null) {
-
-                        if ($comment->ip === Yii::$app->request->userIP){
-                            if (date('U') - $comment->create_at < \Yii::$app->params['time_UD_comments']){
-                                $comment->text = Yii::$app->request->post('text');
-                                $comment->save();
-                            } else {
-                                throw new \yii\web\HttpException(403, 'Comment added over an '.\Yii::$app->params['time_UD_comments'].' seconds ago');
-                            }
+        if (\Yii::$app->request->get('id')){
+            try {
+                $comment = Comments::findOne(\Yii::$app->request->get('id'));
+                if ($comment != null) {
+                    if ($comment->ip === \Yii::$app->request->userIP){
+                        if (date('U') - $comment->created_at < \Yii::$app->params['time_UD_comments']){
+                            $comment->delete();
+                            throw new \yii\web\HttpException(0,'Comments deleted successfully');
                         } else {
-                            throw new \yii\web\HttpException(403, 'Comment added from another IP');
+                            throw new \yii\web\HttpException(403, 'Comment added over an '.\Yii::$app->params['time_UD_comments'].' seconds ago');
                         }
-
-                        return $comment;
                     } else {
-                        throw new \yii\web\HttpException(404, 'No comments found with this id');
+                        throw new \yii\web\HttpException(403, 'Comment added from another IP');
                     }
-                } catch (Exception $ex) {
-                    throw new \yii\web\HttpException(500, 'Internal server error');
+                } else {
+                    throw new \yii\web\HttpException(404, 'No comments found with this id');
                 }
-            } else {
-                throw new \yii\web\HttpException(404, 'Not found comment_id in query string');
+            } catch (Exception $ex) {
+                throw new \yii\web\HttpException(500, 'Internal server error');
             }
         } else {
-            throw new \yii\web\HttpException(400, 'There are no query string');
+            throw new \yii\web\HttpException(404, 'Not found comment_id in query string');
         }
     }
 
@@ -136,7 +114,7 @@ class CommentsController extends ActiveController
         if (($model = $modelClass::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new \yii\web\HttpException('The requested page does not exist.');
         }
     }
 

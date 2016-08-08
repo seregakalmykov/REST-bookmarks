@@ -5,7 +5,6 @@ namespace app\controllers;
 use app\models\Bookmarks;
 use app\models\Comments;
 use yii\rest\ActiveController;
-use yii\data\ActiveDataProvider;
 
 class BookmarksController extends ActiveController
 {
@@ -34,8 +33,16 @@ class BookmarksController extends ActiveController
     {
         if (!empty($_GET)) {
             try {
-                if ($bookmark = Bookmarks::find()->where(['url' => \Yii::$app->request->get('url')])->all() !== null){
-                    return Bookmarks::find()->where(['url' => \Yii::$app->request->get('url')])->all();
+                if (Bookmarks::find()->where(['url' => \Yii::$app->request->get('url')])->one() !== null){
+                    $Bookmark = Bookmarks::find()->where(['url' => \Yii::$app->request->get('url')])->one();
+                    $comments = Comments::find()->where(['bookmark_id' => $Bookmark->id])->all();
+                    $response = [
+                        'id' => $Bookmark->id,
+                        'created_at' => $Bookmark->created_at,
+                        'url' => $Bookmark->url,
+                        'comments' => $comments,
+                    ];
+                    return $response;
                 } else {
                     throw new \yii\web\HttpException(404, 'No bookmarks found with this url');
                 }
